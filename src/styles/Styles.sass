@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css?family=Charmonman|Roboto')
+
+body
+  background: gray
+  font-family: 'Roboto', sans-serif
+
+h1
+  font-family: 'Roboto', sans-serif
+  color: #cecece
+  //font-style: oblique
+  font-size: xx-large
+
+.btn__wrapper
+  display: flex
+  justify-content: center
+  align-items: center
+
+.btn__wrapper button, th, td
+  margin: 10px
+
+table
+  height: 80vh
+
+table, th, td
+  animation: slide-up 0.8s ease
+
+th, td
+  margin: 10px
+
+.cityCell
+  width: 120px
+  text-align: center
+
+
+.themeColor
+  color: #08fdd8
+
+
+.listFullHeight
+  height: 90vh
+
+
+@keyframes slide-up
+  0%
+    opacity: 0
+    transform: translateY(20px)
+  100%
+    opacity: 1
+    transform: translateY(0)
+
+.element_wrapper
+  display: flex
+  flex-direction: column
