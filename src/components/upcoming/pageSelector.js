@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 export const PageSelector = (props) => {
 
   function addButton(title, val) {
-    return <button onClick={()=> {props.changePage(val)}}>{title}</button>
+    return <button onClick={()=> {props.changePage('pageNumber', val)}}>{title}</button>
   }
 
 

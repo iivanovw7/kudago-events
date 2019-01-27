@@ -1,11 +1,14 @@
 import * as types from '../constants/ActionTypes';
 
-export default function (state = [], action) {
+export default function (state = {loaded: false, data: null}, action) {
 
 
   switch (action.type) {
     case types.FETCH_DESCRIPTION:
-      return [ action.payload.data, ...state ];
+      return {
+        loaded: true,
+        data: action.payload.data
+      }
   }
 
   return state;

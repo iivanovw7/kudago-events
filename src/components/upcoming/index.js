@@ -27,8 +27,8 @@ class Upcoming extends Component {
       pages: null, //number of pages
       places_ids: [], //id`s of places from current lists
       places: [], //places array (addresses)
-      show_details: false,
-      lastPage: false //last listings page opened
+      show_details: false, //detail view component should be shown
+      detailView: {} //element opened in detail view
 
     }
 
@@ -48,6 +48,7 @@ class Upcoming extends Component {
 
 
   //finds element in object, returns request string if not found
+  //used to find city name in slug listing
   findWhere = (array, criteria) => {
     let key = Object.keys(criteria)[0];
 
@@ -95,7 +96,10 @@ class Upcoming extends Component {
                 <td className={'table-active'} style={{width: '100px'}}>{!event.place ? ' ' : event.place.id}</td>
                 <td className={'table-active'} style={{width: '500px'}}>{event.title}</td>
                 <td className={'table-active'} style={{width: '100px'}}>
-                  <button onClick={() => {this.props.fetchDescription(event.id)}} style={{width: '100px'}}>Подробнее</button>
+                  <button onClick={() => {
+                    this.props.fetchDescription(event.id);
+                    this.handleNewState('show_details', true)
+                  }} style={{width: '100px'}}>Подробнее</button>
                 </td>
               </tr>
           )
@@ -105,13 +109,13 @@ class Upcoming extends Component {
     )
   };
 
+  //handles new state by key and value pair
+  handleNewState = (index, value) => {
 
-  //handles new page call
-  handleNewPage = (index) => {
-
-    this.setState({pageNumber: index});
+    this.setState({[index]: value});
 
   };
+
 
   //get number of pages
   calcPages = () => {
@@ -120,21 +124,39 @@ class Upcoming extends Component {
 
   //display render pages selectors
   renderPagesSelector = () => {
-    return <PageSelector changePage={this.handleNewPage} page={this.state.pageNumber} pages={this.calcPages()}/>
+    return <PageSelector changePage={this.handleNewState} page={this.state.pageNumber} pages={this.calcPages()}/>
+  };
+
+  //display detailed description component as soon as details data fetched and show__details state switched
+  renderDetailDescription = () => {
+    if(this.state.show_details && this.props.description.loaded === true) {
+      return (<EventDescription event={this.props.description.data.data} closePreview={this.handleNewState}/>)
+    }
   };
 
   render() {
 
 
-    //{!this.props.events[0] ? <p>Загрузка...</p> : this.filterEvents()}
+    if(!this.props.events[0]) {
+      return (
+        <div style={Wrapper}>
+          <p>Загрузка...</p>
+        </div>
+
+      )
+    }
 
     return (
+
       <div style={Wrapper}>
         <h1 style={{marginTop: '10px', marginLeft: '0px'}} className="header">KudaGo events list</h1>
         <div>
-          {!this.props.events[0] ? <p>Загрузка...</p> : this.renderEvents(this.state.pageNumber)}
+          {this.renderDetailDescription()}
         </div>
-        {!this.props.events[0] ? ' ' : this.renderPagesSelector()}
+        <div>
+          {this.renderEvents(this.state.pageNumber)}
+        </div>
+        {this.renderPagesSelector()}
       </div>
 
     )
@@ -161,3 +183,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Upcoming)
+
+
+
