@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import {v1 as uuidv1} from 'uuid';
-import Redirect from 'react-router-dom'
-import PropTypes from 'prop-types';
 
 
-//returns pages selector
+
 export const EventDescription = (props) => {
 
   function addPagesButton(title, index, val) {
@@ -16,7 +14,6 @@ export const EventDescription = (props) => {
   return (
     <div className={'description__wrapper'}>
       <h2>{props.event.title}</h2>
-      <strong><a href={props.event.site_url} target="_blank" >Купить билет</a></strong>
       <div className={'description__elements'}>
         <div className={'description__pictures'}>
           {_.map(props.event.images, element => {
@@ -26,8 +23,16 @@ export const EventDescription = (props) => {
           })}
         </div>
       </div>
+      <div style={{display: 'inline-flex', flexWrap: 'wrap'}}>
+        {_.map(props.event.tags, element => {
+          return (
+            <p style={{color: 'white', backgroundColor: 'black', padding: '5px', borderRadius: '5px', margin: '10px', whiteSpace: 'nowrap'}} key={uuidv1()}>{element}</p>
+          )
+        })}
+      </div>
+      <strong><a href={props.event.site_url} target="_blank">Купить билет</a></strong>
       <div dangerouslySetInnerHTML={{__html: props.event.description}} />
-      <div className={'btn__wrapper'} height={200} width={900}>
+      <div className={'btn__wrapper_description'} height={200} width={900}>
         {addPagesButton('Закрыть', 'show_details', false)}
       </div>
     </div>

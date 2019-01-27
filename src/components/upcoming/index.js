@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 import {fetchEvents, fetchPlaces, fetchDescription} from '../../actions/index.js'
 import _ from 'lodash';
 import {v1 as uuidv1} from 'uuid';
-import { PageSelector } from './pageSelector.js';
+import {PageSelector} from './pageSelector.js';
 import moment from 'moment';
-import { slugs } from './slugs.js';
-import { EventDescription } from './description'
+import {slugs} from './slugs.js';
+import {EventDescription} from './description'
 
 
 const Wrapper = {
-  maxWidth: '900px',
+  maxWidth: '1000px',
   margin: '0 auto',
 };
 
@@ -28,8 +28,7 @@ class Upcoming extends Component {
       places_ids: [], //id`s of places from current lists
       places: [], //places array (addresses)
       show_details: false, //detail view component should be shown
-      detailView: {} //element opened in detail view
-
+      detailView: {}, //element opened in detail view
     }
 
 
@@ -52,8 +51,8 @@ class Upcoming extends Component {
   findWhere = (array, criteria) => {
     let key = Object.keys(criteria)[0];
 
-    return array.find(function(elem){
-      if(elem[key] === criteria[key]) {
+    return array.find(function (elem) {
+      if (elem[key] === criteria[key]) {
         return elem[key] === criteria[key]
       }
       else {
@@ -63,7 +62,6 @@ class Upcoming extends Component {
   };
 
 
-
   //forming events table
   renderEvents = (pageNumber) => {
 
@@ -71,8 +69,7 @@ class Upcoming extends Component {
     let start = ((pageNumber * this.state.itemsPerPage) - (pageNumber - 1));
     let end = Math.min(start + this.state.itemsPerPage, this.props.events[0].length);
 
-    let events = this.props.events[0].slice(start-1, end-1);
-
+    let events = this.props.events[0].slice(start - 1, end - 1);
 
 
     return (
@@ -80,6 +77,7 @@ class Upcoming extends Component {
         <thead>
         <tr>
           <th>Начало</th>
+          <th>Окончание</th>
           <th>Афиша</th>
           <th>Город</th>
           <th>Адрес</th>
@@ -89,19 +87,26 @@ class Upcoming extends Component {
         <tbody>
         {_.map(events, event => {
           return (
-              <tr className={'table-active'} key={uuidv1()}>
-                <td className={'table-active'} style={{width: '100px'}}>{moment.unix(event.dates[0].start).format("MM.DD.YYYY  HH:MM")}</td>
-                <td className={'table-active'} style={{width: '100px'}}><img style={{width: '100px'}} src={event.images[0].image}/></td>
-                <td className={'table-active cityCell'}>{this.findWhere(slugs, {slug: event.location.slug}).city}</td>
-                <td className={'table-active'} style={{width: '100px'}}>{!event.place ? ' ' : event.place.id}</td>
-                <td className={'table-active'} style={{width: '500px'}}>{event.title}</td>
-                <td className={'table-active'} style={{width: '100px'}}>
-                  <button onClick={() => {
-                    this.props.fetchDescription(event.id);
-                    this.handleNewState('show_details', true)
-                  }} style={{width: '100px'}}>Подробнее</button>
-                </td>
-              </tr>
+            <tr
+              className={'table-active event_table_row'}
+              key={uuidv1()}
+              onClick={() => {
+                this.props.fetchDescription(event.id);
+                this.handleNewState('show_details', true)
+              }}>
+              <td className={'table-active'} style={{width: '100px'}}>
+                {moment.unix(event.dates[0].start).format("MM.DD.YYYY  HH:MM")}
+              </td>
+              <td className={'table-active'} style={{width: '100px'}}>
+                {moment.unix(event.dates[0].end).format("MM.DD.YYYY  HH:MM")}
+              </td>
+              <td className={'table-active'} style={{width: '100px'}}>
+                <img style={{width: '100px'}} src={event.images[0].image}/>
+              </td>
+              <td className={'table-active cityCell'}>{this.findWhere(slugs, {slug: event.location.slug}).city}</td>
+              <td className={'table-active'} style={{width: '100px'}}>{!event.place ? ' ' : event.place.id}</td>
+              <td className={'table-active'} style={{width: '500px'}}>{event.title}</td>
+            </tr>
           )
         })}
         </tbody>
@@ -129,7 +134,7 @@ class Upcoming extends Component {
 
   //display detailed description component as soon as details data fetched and show__details state switched
   renderDetailDescription = () => {
-    if(this.state.show_details && this.props.description.loaded === true) {
+    if (this.state.show_details && this.props.description.loaded === true) {
       return (<EventDescription event={this.props.description.data.data} closePreview={this.handleNewState}/>)
     }
   };
@@ -137,7 +142,7 @@ class Upcoming extends Component {
   render() {
 
 
-    if(!this.props.events[0]) {
+    if (!this.props.events[0]) {
       return (
         <div style={Wrapper}>
           <p>Загрузка...</p>

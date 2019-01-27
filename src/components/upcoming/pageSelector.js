@@ -13,7 +13,7 @@ export const PageSelector = (props) => {
   return (
     <div className={'btn__wrapper'} height={200} width={900}>
       {props.page === 0 ? '' : addButton('Назад', props.page - 1)}
-      {props.page + 1}
+      {`Страница ${props.page + 1}`}
       {props.page + 1 === props.pages ? '' : addButton('Вперед', props.page + 1)}
     </div>
   )
