@@ -40,7 +40,15 @@ export function fetchDescription(id) {
 }
 
 
-export function fetchPlaces(options) {
+export function changePage(index) {
+  return {
+    type: types.SWITCH_PAGE,
+    payload: index
+  }
+}
+
+
+export function fetchPlaces() {
 
   //get data from server application (implemented in order to avoid CORS restrictions)
   return function(dispatch) {
