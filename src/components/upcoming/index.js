@@ -18,9 +18,7 @@ class Upcoming extends Component {
     super(props);
 
     this.state = {
-      pageNumber: 1, //current page number
-      itemsPerPage: 10,
-      pages: null, //number of pages
+      itemsPerPage: 10, //items rendered per one page
       show_details: false, //detail view component should be shown
     }
 
@@ -38,6 +36,15 @@ class Upcoming extends Component {
 
   }
 
+
+
+
+  //handles new state by key and value pair
+  handleNewState = (index, value) => {
+
+    this.setState({[index]: value});
+
+  };
 
 
   //get number of pages
@@ -78,7 +85,11 @@ class Upcoming extends Component {
           {this.renderDetailDescription()}
         </div>
         <div>
-          <EventsList pageNumber={this.props.page} itemsPerPage={this.state.itemsPerPage} handleNewState={this.handleNewState}/>
+          <EventsList
+            pageNumber={this.props.page}
+            itemsPerPage={this.state.itemsPerPage}
+            handleNewState={this.handleNewState}
+          />
         </div>
         {this.renderPagesSelector()}
       </div>
